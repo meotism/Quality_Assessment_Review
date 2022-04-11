@@ -117,6 +117,5 @@ def devideGroup():
     result.drop("cluster", axis=1, inplace=True)
     result.drop("group", axis=1, inplace=True)
     result.to_csv('./static/uploads/result.csv')
-    data = pd.read_csv('./static/uploads/result.csv')
-    data = data.to_dict(orient='records')
-    return data
+    review = review.to_dict(orient='records')
+    return review
