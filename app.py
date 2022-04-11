@@ -1,6 +1,5 @@
 from flask import Flask, flash, redirect, request
 from datetime import datetime
-from regex import P
 from sklearn import cluster
 from werkzeug.utils import secure_filename
 
