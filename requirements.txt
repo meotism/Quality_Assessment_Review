@@ -1,4 +1,6 @@
 Flask
+gunicorn
+cloudinary
 python-dotenv
 numpy 
 pandas
