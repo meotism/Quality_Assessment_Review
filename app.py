@@ -16,7 +16,7 @@ from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 # SETTING FOLDER
 UPLOAD_FOLDER = './static/uploads/'
 app = Flask(__name__, static_url_path='/static')
