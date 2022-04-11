@@ -7,3 +7,5 @@ pandas
 seaborn 
 sklearn
 flask_restful
+CORS
+flask_cors
