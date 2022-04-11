@@ -95,7 +95,6 @@ def devideGroup():
         g4["ReviewID"].count())
     wg_eachgroup_feature.loc['wg', :] = wg_eachgroup_feature.sum(axis=0)
     wg_eachgroup_feature.iloc[-1]
-    wg_eachgroup_feature.to_csv("./static/uploads/wg_eachgroup_feature.csv")
     max = wg_eachgroup_feature.max(axis=1).iloc[-1]
     second = wg_eachgroup_feature.apply(
         lambda row: row.nlargest(2).values[-1], axis=1).iloc[-1]
@@ -112,6 +111,7 @@ def devideGroup():
                   (table["cluster"] == 2), (table["cluster"] == 3)]
     group = ['g1', 'g2', 'g3', 'g4']
     result['group'] = np.select(condition2, group)
+    wg_eachgroup_feature.to_csv("./static/uploads/wg_eachgroup_feature.csv")
     value2 = wg_eachgroup_feature.iloc[-1].to_list()
     result['groupQuality'] = np.select(condition2, value2)
     result.drop("cluster", axis=1, inplace=True)
