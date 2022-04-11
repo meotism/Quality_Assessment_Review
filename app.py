@@ -132,9 +132,9 @@ def predictReview():
     data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
     condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
                   (data["cluster"] == 2), (data["cluster"] == 3)]
-    group = ['g1', 'g2', 'g3', 'g4']
     wg_eachgroup_feature = pd.read_csv(
-        './static/uploads/wg_eachgroup_feature.csv')
+        "./static/uploads/wg_eachgroup_feature.csv")
+    wg_eachgroup_feature.drop('FeatureID', axis=1, inplace=True)
     value2 = wg_eachgroup_feature.iloc[-1].to_list()
     data['groupQuality'] = np.select(condition2, value2)
     data = data.to_dict(orient='records')
