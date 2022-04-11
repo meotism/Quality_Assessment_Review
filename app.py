@@ -127,7 +127,7 @@ def review():
 
 
 def predict_review():
-    data = pd.read_csv('./static/uploads/Matrix.csv')
+    data = pd.read_csv('./static/uploads/matrix.csv')
     cluster = KMeans(n_clusters=4)
     data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
     condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
