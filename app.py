@@ -38,8 +38,9 @@ def homepage():
 
 @app.route("/test")
 def test():
-    data = pd.read_csv('./static/uploads/Feature.csv')
-
+    data = pd.read_csv('./static/uploads/matrix.csv')
+    cluster = KMeans(n_clusters=4)
+    data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
     data = data.to_dict(orient='records')
 
     return {"data": data}, 200
@@ -52,9 +53,9 @@ def review():
 
 
 def devideGroup():
-    df_feature = pd.read_csv('./static/uploads/Feature.csv')
+    df_feature = pd.read_csv('./static/uploads/feature.csv')
     df_feature.head()
-    df_review = pd.read_csv('./static/uploads/Review-Feature.csv')
+    df_review = pd.read_csv('./static/uploads/review_feature.csv')
     df_review.head()
     df = merge(df_feature, df_review, on="FeatureID")
     df.head()
@@ -64,7 +65,7 @@ def devideGroup():
     table.head()
     table = table.fillna(0).reset_index()
     table.head()
-    table.to_csv('./static/uploads/Matrix.csv')
+    table.to_csv('./static/uploads/matrix.csv')
     # trích xuất các feature
     cols = table.columns[1:]
     # clustering of reviews
@@ -72,7 +73,7 @@ def devideGroup():
     cluster = KMeans(n_clusters=4)
     # dự đoán nhóm cụm cho mỗi dòng đánh giá
     table["cluster"] = cluster.fit_predict(table[table.columns[2:]])
-    table.to_csv('./static/uploads/ClusterMatrix.csv')
+    table.to_csv('./static/uploads/cluster_matrix.csv')
     g1 = table[table["cluster"] == 0]
     g2 = table[table["cluster"] == 1]
     g3 = table[table["cluster"] == 2]
@@ -116,5 +117,6 @@ def devideGroup():
     result.drop("cluster", axis=1, inplace=True)
     result.drop("group", axis=1, inplace=True)
     result.to_csv('./static/uploads/result.csv')
-    review = review.to_dict(orient='records')
-    return review
+    data = pd.read_csv('./static/uploads/result.csv')
+    data = data.to_dict(orient='records')
+    return data
