@@ -38,7 +38,7 @@ def homepage():
 
 @app.route("/test")
 def test():
-    data = pd.read_csv('./static/uploads/Review-Feature.csv')
+    data = pd.read_csv('./static/uploads/Feature.csv')
 
     data = data.to_dict(orient='records')
 
