@@ -1,12 +1,15 @@
 from flask import Flask, flash, redirect, request
 from datetime import datetime
+from regex import P
+from sklearn import cluster
 from werkzeug.utils import secure_filename
 
 from pandas import pandas as pd
 import numpy as np
+import seaborn as sns
+from sklearn.cluster import KMeans
 
 app = Flask(__name__)
-
 
 # SETTING FOLDER
 UPLOAD_FOLDER = './static/uploads/'
@@ -29,7 +32,9 @@ def homepage():
 
 @app.route("/test")
 def test():
-    data = pd.read_csv('./static/uploads/feature.csv')
+    data = pd.read_csv('./static/uploads/matrix.csv')
+    cluster = KMeans(n_clusters=4)
+    data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
     data = data.to_dict(orient='records')
 
     return {"data": data}, 200
