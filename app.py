@@ -38,9 +38,8 @@ def homepage():
 
 @app.route("/test")
 def test():
-    data = pd.read_csv('./static/uploads/matrix.csv')
-    cluster = KMeans(n_clusters=4)
-    data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
+    data = pd.read_csv('./static/uploads/Review-Feature.csv')
+
     data = data.to_dict(orient='records')
 
     return {"data": data}, 200
