@@ -120,22 +120,22 @@ def devideGroup():
     return data
 
 
-@app.route("/apireview")
-def review():
-    data = predict_review()
-    return {"data": data}, 200
+# @app.route("/apireview")
+# def review():
+#     data = predict_review()
+#     return {"data": data}, 200
 
 
-def predict_review():
-    data = pd.read_csv('./static/uploads/matrix.csv')
-    cluster = KMeans(n_clusters=4)
-    data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
-    condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
-                  (data["cluster"] == 2), (data["cluster"] == 3)]
-    group = ['g1', 'g2', 'g3', 'g4']
-    wg_eachgroup_feature = pd.read_csv(
-        './static/uploads/wg_eachgroup_feature.csv')
-    value2 = wg_eachgroup_feature.iloc[-1].to_list()
-    data['groupQuality'] = np.select(condition2, value2)
-    data = data.to_dict(orient='records')
-    return data
+# def predict_review():
+#     data = pd.read_csv('./static/uploads/matrix.csv')
+#     cluster = KMeans(n_clusters=4)
+#     data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
+#     condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
+#                   (data["cluster"] == 2), (data["cluster"] == 3)]
+#     group = ['g1', 'g2', 'g3', 'g4']
+#     wg_eachgroup_feature = pd.read_csv(
+#         './static/uploads/wg_eachgroup_feature.csv')
+#     value2 = wg_eachgroup_feature.iloc[-1].to_list()
+#     data['groupQuality'] = np.select(condition2, value2)
+#     data = data.to_dict(orient='records')
+#     return data
