@@ -48,6 +48,11 @@ def test():
 
 @app.route("/review")
 def review():
+    data = devideGroup()
+    return {"data": data}, 200
+
+
+def devideGroup():
     df_feature = pd.read_csv('./static/uploads/Feature.csv')
     df_feature.head()
     df_review = pd.read_csv('./static/uploads/Review-Feature.csv')
@@ -114,4 +119,4 @@ def review():
     result.to_csv('./static/uploads/result.csv')
     data = pd.read_csv('./static/uploads/result.csv')
     data = data.to_dict(orient='records')
-    return {"data": data}, 200
+    return data
