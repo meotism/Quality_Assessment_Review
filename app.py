@@ -125,6 +125,7 @@ def test():
     wg_eachgroup_feature.drop('FeatureID', axis=1, inplace=True)
     value2 = wg_eachgroup_feature.iloc[-1].to_list()
     data['groupQuality'] = np.select(condition2, value2)
+    data.drop("cluster", axis=1, inplace=True)
     data = data.to_dict(orient='records')
 
     return {"data": data}, 200
