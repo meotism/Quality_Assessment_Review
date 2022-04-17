@@ -1,3 +1,4 @@
+import json
 from flask import Flask, flash, redirect, request
 from datetime import datetime
 from sklearn import cluster
@@ -110,9 +111,11 @@ def devideGroup():
     return data
 
 
-@app.route("/test")
+@app.route("/test", methods=['POST'])
 def test():
-    data = pd.read_csv('./static/uploads/matrix.csv')
+    record = json.loads(request.data)
+    #data = pd.read_csv('./static/uploads/matrix.csv')
+    data = pd.read_json(record, orient='index')
     cluster = KMeans(n_clusters=4)
     data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
     condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
