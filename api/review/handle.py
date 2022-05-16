@@ -9,7 +9,7 @@ matrixDB = MatrixDB()
 wgFeatureDB = WgFeatureDB()
 
 
-def DBdevideGroup():
+def devideGroup():
     df_feature = pd.read_csv('./static/uploads/feature.csv')
     df_feature.head()
     df_review = pd.read_csv('./static/uploads/review_feature.csv')
@@ -104,15 +104,14 @@ def add2DataFrame():
     # remove first column of 2 data frames
     df_matrix.drop(df_matrix.columns[0], axis=1, inplace=True)
     df_no.drop(df_no.columns[0], axis=1, inplace=True)
-
+# swap element column and last row df_matrix
+    df_matrix = df_matrix.iloc[-1, :].to_frame().T
     # add row 1 -> len of df_no to df_matrix
     len_no = len(df_no)
     len_matrix = len(df_matrix)
     for i in range(len_no):
         row = df_no.iloc[i]
         df_matrix.loc[len_matrix + i] = row.values
-
-    print(df_matrix)
 
     return df_matrix.to_json(orient='records')
 
@@ -124,22 +123,40 @@ def createlabel():
     # add to matrixDB collection
     matrixDB.df_to_mongo(data)
     # data = pd.read_json(json, orient='index')
-    cluster = KMeans(n_clusters=4)
-    data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
-    condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
-                  (data["cluster"] == 2), (data["cluster"] == 3)]
     wg_eachgroup_feature = pd.read_csv(
         "./static/uploads/wg_eachgroup_feature.csv")
-    value2 = wg_eachgroup_feature.iloc[-1].to_list()
-    value2.remove('group')
-    data['groupQuality'] = np.select(condition2, value2)
+    listGroup = []
+    for element in json:
+        temp = pd.DataFrame(wg_eachgroup_feature)
+        keys = list(element.keys())
+        temparr = []
+        for key in keys:
+            if key != 'ReviewID':
+
+                if element[key] == 0:
+                    temparr.append(int(key)-1)
+                    del element[key]
+                    continue
+        temp.drop(temparr, inplace=True)
+        temp.drop(temp.tail(1).index, inplace=True)
+        temp1 = pd.DataFrame(temp.loc[:, temp.columns != 'FeatureID'])
+        temp1 = temp1.astype(float)
+        temp1.loc['sum', :] = temp1.sum(axis=0)
+        temp1 = temp1.T
+        value2 = wg_eachgroup_feature.iloc[-1].to_list()
+        value2.remove('group')
+        temp1['group'] = value2
+        maxValueIndex = temp1['sum'].max()
+        groupQuality = temp1['group'].loc[temp1['sum'] == maxValueIndex]
+        listGroup.extend(groupQuality.to_list())
+    data = pd.DataFrame(json)
+    data['groupQuality'] = listGroup
     data = data[['ReviewID', 'groupQuality']]
     data = data.to_dict(orient='records')
-
     return {"data": data}, 200
 
 
-def devideGroup():
+def DBdevideGroup():
     # tạo table đếm mỗi Feature theo review
     table = matrixDB.mongo_to_df()
     table = table.drop(columns=['_id'])
@@ -149,7 +166,7 @@ def devideGroup():
     # tao thuat toan cluster kmean với số cụm =4
     cluster = KMeans(n_clusters=4)
     # dự đoán nhóm cụm cho mỗi dòng đánh giá
-    table["cluster"] = cluster.fit_predict(table[table.columns[2:]])
+    table["cluster"] = cluster.fit_predict(table[table.columns[1:]])
     table.to_csv('./static/uploads/cluster_matrix.csv')
     g1 = table[table["cluster"] == 0]
     g2 = table[table["cluster"] == 1]
@@ -197,7 +214,6 @@ def devideGroup():
     result.drop("cluster", axis=1, inplace=True)
     result.drop("group", axis=1, inplace=True)
     result.to_csv('./static/uploads/result.csv')
-    print(result)
     return result.to_dict(orient='records')
 
 
@@ -208,15 +224,35 @@ def DBcreatelabel():
     # add to matrixDB collection
     matrixDB.df_to_mongo(data)
     # data = pd.read_json(json, orient='index')
-    cluster = KMeans(n_clusters=4)
-    data["cluster"] = cluster.fit_predict(data[data.columns[2:]])
-    condition2 = [(data["cluster"] == 0), (data["cluster"] == 1),
-                  (data["cluster"] == 2), (data["cluster"] == 3)]
     wg_eachgroup_feature = wgFeatureDB.mongo_to_df()
-    wg_eachgroup_feature = wg_eachgroup_feature.drop(columns=['_id'])
-    value2 = wg_eachgroup_feature.iloc[-1].to_list()
-    data['groupQuality'] = np.select(condition2, value2)
+    listGroup = []
+    for element in json:
+        temp = pd.DataFrame(wg_eachgroup_feature)
+        keys = list(element.keys())
+        temparr = []
+        for key in keys:
+            if key != 'ReviewID':
+                if element[key] == 0:
+                    temparr.append(int(key)-1)
+                    del element[key]
+                    continue
+        temp.drop(temparr, inplace=True)
+        temp.drop(temp.tail(1).index, inplace=True)
+        temp1 = pd.DataFrame(temp.loc[:, temp.columns != '_id'])
+        temp1 = temp1.astype(float)
+        temp1.loc['sum', :] = temp1.sum(axis=0)
+        temp1 = temp1.T
+        value2 = wg_eachgroup_feature.iloc[-1].to_list()
+        print(value2)
+        value2.remove(26)
+        temp1['group'] = value2
+        maxValueIndex = temp1['sum'].max()
+        groupQuality = temp1['group'].loc[temp1['sum'] == maxValueIndex]
+        listGroup.extend(groupQuality.to_list())
+    data = pd.DataFrame(json)
+    data['groupQuality'] = listGroup
     data = data[['ReviewID', 'groupQuality']]
+    value2 = wg_eachgroup_feature.iloc[-1].to_list()
     data = data.to_dict(orient='records')
 
     return {"data": data}, 200

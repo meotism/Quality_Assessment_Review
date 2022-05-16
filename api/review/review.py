@@ -6,7 +6,7 @@ review_blueprint = Blueprint('review_blueprint', __name__)
 
 @review_blueprint.route('/', methods=['GET'])
 def runAgain():
-    data = devideGroup()
+    data = DBdevideGroup()
     return {"data": data}, 200
 
 

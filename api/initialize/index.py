@@ -5,7 +5,7 @@ init_blueprint = Blueprint('init_blueprint', __name__)
 
 @init_blueprint.route('/', methods=['GET'])
 def index():
-    data = DBdevideGroup()
+    data = devideGroup()
     return {"data": data}, 200
 
 
