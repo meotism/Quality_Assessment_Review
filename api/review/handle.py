@@ -140,6 +140,7 @@ def createlabel():
         temp.drop(temparr, inplace=True)
         temp.drop(temp.tail(1).index, inplace=True)
         temp1 = pd.DataFrame(temp.loc[:, temp.columns != 'FeatureID'])
+        temp1.drop(temp1.tail(1).index, inplace=True)
         temp1 = temp1.astype(float)
         temp1.loc['sum', :] = temp1.sum(axis=0)
         temp1 = temp1.T
@@ -147,7 +148,10 @@ def createlabel():
         value2.remove('group')
         temp1['group'] = value2
         maxValueIndex = temp1['sum'].max()
-        groupQuality = temp1['group'].loc[temp1['sum'] == maxValueIndex]
+        if maxValueIndex == 0:
+            groupQuality = temp1['group'].loc[temp1['group'] == 'G4']
+        else:
+            groupQuality = temp1['group'].loc[temp1['sum'] == maxValueIndex]
         listGroup.extend(groupQuality.to_list())
     data = pd.DataFrame(json)
     data['groupQuality'] = listGroup
@@ -239,6 +243,7 @@ def DBcreatelabel():
         temp.drop(temparr, inplace=True)
         temp.drop(temp.tail(1).index, inplace=True)
         temp1 = pd.DataFrame(temp.loc[:, temp.columns != '_id'])
+        temp1.drop(temp1.tail(1).index, inplace=True)
         temp1 = temp1.astype(float)
         temp1.loc['sum', :] = temp1.sum(axis=0)
         temp1 = temp1.T
@@ -247,7 +252,10 @@ def DBcreatelabel():
         value2.remove(26)
         temp1['group'] = value2
         maxValueIndex = temp1['sum'].max()
-        groupQuality = temp1['group'].loc[temp1['sum'] == maxValueIndex]
+        if maxValueIndex == 0:
+            groupQuality = temp1['group'].loc[temp1['group'] == 'G4']
+        else:
+            groupQuality = temp1['group'].loc[temp1['sum'] == maxValueIndex]
         listGroup.extend(groupQuality.to_list())
     data = pd.DataFrame(json)
     data['groupQuality'] = listGroup
