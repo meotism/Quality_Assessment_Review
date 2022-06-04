@@ -1,3 +1,4 @@
+from sys import displayhook
 from flask import request
 import pandas as pd
 import numpy as np
@@ -11,22 +12,21 @@ wgFeatureDB = WgFeatureDB()
 
 def devideGroup():
     df_feature = pd.read_csv('./static/uploads/feature.csv')
-    df_feature.head()
     df_review = pd.read_csv('./static/uploads/review_feature.csv')
-    df_review.head()
+
     df = merge(df_feature, df_review, on="FeatureID")
-    df.head()
+
     # tạo table đếm mỗi Feature theo review
     table = df.pivot_table(index=["ReviewID"], columns=[
                            "FeatureID"], values="n")
     table.head()
     table = table.fillna(0).reset_index()
-    table.head()
     # remove all data and add matrix in collection MatrixDB
     matrixDB.remove_all_data()
     matrixDB.df_to_mongo(table)
     # trích xuất các feature
     cols = table.columns[1:]
+    print(cols)
     # clustering of reviews
     # tao thuat toan cluster kmean với số cụm =4
     cluster = KMeans(n_clusters=4)
