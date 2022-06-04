@@ -1,5 +1,5 @@
 ﻿FeatureID,NameFeature
-1,Giảng viên
+1,Giáo viên
 2,Cơ sở vật chất
 3,Môi trường học
 4,Thủ tục hành chính
@@ -10,16 +10,18 @@
 9,Phòng học
 10,Học phí
 11,Câu lạc bộ
-12,Bài giảng
+12,Khóa học
 13,Deadline
-14,Hệ thống đăng ký môn học
+14,Danh tiếng trường
 15,Hệ thống quản lý học tập
-16,Công tác truyền thông
+16,Truyền thông
 17,Khuôn viên trường
-18,Truyền thông
+18,Website Trường
 19,căn tin
 20,Bảo vệ
-21,Cổng trường
-22,Nội quy
-23,Cơ hội việc làm
-24,Mạng internet
+21,Nội quy
+22,Cơ hội việc làm
+23,Mạng internet
+24,Học bổng
+25,Điểm chuẩn
+26,Ngành học
