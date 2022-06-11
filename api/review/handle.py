@@ -146,6 +146,7 @@ def createlabel():
         temp1 = temp1.T
         value2 = wg_eachgroup_feature.iloc[-1].to_list()
         value2.remove('group')
+        #displayhook(temp1)
         temp1['group'] = value2
         maxValueIndex = temp1['sum'].max()
         if maxValueIndex == 0:
@@ -249,7 +250,7 @@ def DBcreatelabel():
         temp1 = temp1.T
         value2 = wg_eachgroup_feature.iloc[-1].to_list()
         print(value2)
-        value2.remove(26)
+        value2.remove(28)
         temp1['group'] = value2
         maxValueIndex = temp1['sum'].max()
         if maxValueIndex == 0:
