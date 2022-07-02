@@ -1,4 +1,4 @@
-Flask
+flask
 gunicorn
 python-dotenv
 numpy 
@@ -8,3 +8,5 @@ sklearn
 flask-cors
 pymongo[srv]
 Flask-PyMongo
+fastapi
+uvicorn
